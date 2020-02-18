@@ -39,7 +39,7 @@ func main() {
 }
 
 func InitialMigration() {
-	db.AutoMigrate(&BtcPriceRecord{})
+	db.AutoMigrate(&BtcPriceRecord{}, &BsPriceRecord{})
 }
 
 func logger(err string, domain string) {

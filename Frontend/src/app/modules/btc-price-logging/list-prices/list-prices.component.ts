@@ -5,6 +5,7 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { AlertService } from 'ngx-alerts';
 import { BtcPriceLoggingService } from '../btc-price-logging.service';
 import { backend_url } from '../../../app.component';
+import { Chart } from 'chart.js';
 
 export interface ChartAxis {
   x: string;
@@ -35,7 +36,7 @@ export interface LastBtcPriceElement {
   styleUrls: ['./list-prices.component.css']
 })
 export class ListBtcPricesComponent implements OnInit {
-
+  chart = [];
   @ViewChild('btcPricesPaginator', { static: false }) btcPricesPaginator: MatPaginator;
 
   btcPricedisplayedColumns: string[] = ['ID', 'value', 'updated'];
@@ -49,9 +50,10 @@ export class ListBtcPricesComponent implements OnInit {
 
   listBtcPrices() {
     this.btcPriceLoggingService.getBtcPrices().subscribe(data => {
-      console.log(data)
-      this.BtcPricesDataSource = data.tableData; 
+      this.BtcPricesDataSource =  new MatTableDataSource( data.tableData.reverse()); 
+      console.log(data.tableData.length)
       this.BtcPricesDataSource.paginator = this.btcPricesPaginator;
+      this.formatChart(data.chartData)
     })
   }
 
@@ -61,6 +63,35 @@ export class ListBtcPricesComponent implements OnInit {
     })
   }
 
+  formatChart(dataset:ChartAxis[]){
+    const labels = dataset.map(item=>item.x)
+    this.chart = new Chart('canvas', {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          { 
+            data: dataset,
+            borderColor: "#3cba9f",
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        legend: {
+          display: false
+        },
+        scales: {
+          xAxes: [{
+            display: true
+          }],
+          yAxes: [{
+            display: true
+          }],
+        }
+      }
+    });
+  }
   ngOnInit() {
     this.listBtcPrices();
     this.getBtcPrice();

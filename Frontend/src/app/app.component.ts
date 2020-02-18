@@ -1,7 +1,6 @@
 import { Component, ViewChild, OnInit, HostListener } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material';
 export const backend_url = 'http://localhost:8000/';
-import { SessionService } from './modules/session/session.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 
@@ -18,7 +17,6 @@ export class AppComponent {
   isLogged:boolean = false
   constructor(
     private httpClient: HttpClient,
-    public sessionService: SessionService,
     private router: Router,
   ) {
   }

@@ -53,23 +53,25 @@ func getBtcPrice(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(btcPrice)
 }
 func formatStringValue(value string) float64 {
-	value = value[:indexOf(value, ".")]
-	value = strings.Replace(value, ",", ".", 1)
+	value = strings.Replace(value, ",", "", 1)
+
 	floatValue, err := strconv.ParseFloat(value, 64)
+	fmt.Println(floatValue)
 	if err != nil {
 		logger(err.Error(), "Converting price to Integer")
 	}
 	return floatValue
 }
-func formatDate(date string) string {
-	stringDate := fmt.Sprintf("%s", date)
-	splittedString := strings.Split(stringDate, " ")
-	splittedDate := fmt.Sprintf("%s %s %s%s", splittedString[0], splittedString[1], splittedString[2], splittedString[3])
-	return splittedDate
-}
+
+// func formatDate(date string) string {
+// 	stringDate := fmt.Sprintf("%s", date)
+// 	splittedString := strings.Split(stringDate, " ")
+// 	splittedDate := fmt.Sprintf("%s %s %s%s", splittedString[0], splittedString[1], splittedString[2], splittedString[3])
+// 	return splittedDate
+// }
 func getBtcPrices(w http.ResponseWriter, r *http.Request) {
 	var btcPrices []BtcPriceRecord
-	db.Order("ID DESC").Limit(1000).Find(&btcPrices)
+	db.Order("ID ASC").Limit(1000).Find(&btcPrices)
 
 	var chartData []ChartAxis
 	for i := 0; i < len(btcPrices); i++ {
