@@ -28,7 +28,8 @@ func handleRequests() {
 	port := ":8000"
 	router.HandleFunc("/btc-prices", getBtcPrices).Methods("GET")
 	router.HandleFunc("/btc-price", getBtcPrice).Methods("GET")
-
+	router.HandleFunc("/bs-price", getBsPrice).Methods("GET")
+	router.HandleFunc("/bs-prices", getBsPrices).Methods("GET")
 	fmt.Println(fmt.Sprintf(fmt.Sprintf("Starting Server at http://%s%s", IP, port)))
 	log.Fatal(http.ListenAndServe(port, handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}),
 		handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"}), handlers.AllowedOrigins([]string{"*"}))(router)))

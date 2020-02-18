@@ -4,8 +4,12 @@ import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'btc',
     loadChildren: './modules/btc-price-logging/btc-price-logging.module#BtcPriceLoggingModule'
+  },
+  {
+    path: 'bs',
+    loadChildren: './modules/bs-price-logging/bs-price-logging.module#BsPriceLoggingModule'
   }
 ];
 

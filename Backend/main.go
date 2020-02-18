@@ -32,8 +32,11 @@ func main() {
 	InitialMigration()
 	time.Sleep(1 * time.Second)
 
+	// go func() {
+	// 	requestCurrentBtcPrice()
+	// }()
 	go func() {
-		requestCurrentBtcPrice()
+		requestCurrentbsPrice()
 	}()
 	handleRequests()
 }

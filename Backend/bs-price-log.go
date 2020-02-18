@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"net"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -15,7 +14,7 @@ import (
 type BsPriceRequest struct {
 	USD struct {
 		Dolartoday float64 `json:dolartoday`
-	} `json:'dolartoday'`
+	} `json:'usd'`
 }
 
 type BsPriceRecord struct {
@@ -38,10 +37,10 @@ func getBsPrice(w http.ResponseWriter, r *http.Request) {
 
 func formatDate(date string) string {
 	stringDate := fmt.Sprintf("%s", date)
-	splittedString := strings.Split(stringDate, " ")
-	splittedDate := fmt.Sprintf("%s %s %s%s", splittedString[0], splittedString[1], splittedString[2], splittedString[3])
-	return splittedDate
+	stringDate = stringDate[:indexOf(date, ":")]
+	return stringDate
 }
+
 func getBsPrices(w http.ResponseWriter, r *http.Request) {
 	var bsPrices []BsPriceRecord
 	db.Order("ID ASC").Limit(1000).Find(&bsPrices)
@@ -91,6 +90,6 @@ func requestCurrentbsPrice() {
 				Timestamp: time.Now().Unix(),
 			})
 		}
-		time.Sleep(3600 * time.Second)
+		time.Sleep(43200 * time.Second)
 	}
 }

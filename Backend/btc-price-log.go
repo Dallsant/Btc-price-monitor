@@ -90,7 +90,12 @@ func getBtcPrices(w http.ResponseWriter, r *http.Request) {
 	}
 	json.NewEncoder(w).Encode(response)
 }
-
+func formatBtcDate(date string) string {
+	stringDate := fmt.Sprintf("%s", date)
+	splittedString := strings.Split(stringDate, " ")
+	splittedDate := fmt.Sprintf("%s %s %s%s", splittedString[0], splittedString[1], splittedString[2], splittedString[3])
+	return splittedDate
+}
 func requestCurrentBtcPrice() {
 	for true {
 		t := &http.Transport{
@@ -114,7 +119,7 @@ func requestCurrentBtcPrice() {
 			json.Unmarshal(body, &btcPrice)
 			db.Create(&BtcPriceRecord{
 				Value:     formatStringValue(btcPrice.Bpi.USD.Rate),
-				Updated:   formatDate(btcPrice.Time.Updated),
+				Updated:   formatBtcDate(btcPrice.Time.Updated),
 				Timestamp: time.Now().Unix(),
 			})
 		}
