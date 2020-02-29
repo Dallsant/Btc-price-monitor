@@ -1,0 +1,61 @@
+<ngx-alerts></ngx-alerts>
+<div class="container" fxLayout="row" fxLayoutAlign="center center">
+
+<h2>All Crypto</h2>
+</div>
+<br>
+<div class="container" fxLayout="row" fxLayoutAlign="center center">
+ 
+  <mat-card>
+    <mat-card-title fxLayoutAlign="center center">
+      Value
+    </mat-card-title>
+  
+    <mat-card-content>
+      <mat-grid-list cols = "3" rowHeight = "150px">
+        <mat-grid-tile 
+        [colspan] = "1"
+        [rowspan] = "1">
+        <h2>Ethereum</h2>
+        <h3>{{LastCryptoPrice.eth}}</h3>
+        </mat-grid-tile>
+        <mat-grid-tile 
+        [colspan] = "1"
+        [rowspan] = "1">
+        <h2>Litecoin</h2>
+        <h3>{{LastCryptoPrice.ltc}}</h3>
+        </mat-grid-tile>
+        <mat-grid-tile 
+        [colspan] = "1"
+        [rowspan] = "1">
+        <h2>Ripple</h2>
+        <h3>{{LastCryptoPrice.xrp}}</h3>
+        </mat-grid-tile>
+     </mat-grid-list>
+     <br>
+     <mat-grid-list cols = "3" rowHeight = "150px">
+      <mat-grid-tile 
+      [colspan] = "1"
+      [rowspan] = "1">
+      <h2>Stellar</h2>
+      <h3>{{LastCryptoPrice.xlm}}</h3>
+      </mat-grid-tile>
+      <mat-grid-tile 
+      [colspan] = "1"
+      [rowspan] = "1">
+      <h2>Binance Coin</h2>
+      <h3>{{LastCryptoPrice.bnb}}</h3>
+      </mat-grid-tile>
+      <mat-grid-tile 
+      [colspan] = "1"
+      [rowspan] = "1">
+     <div><h2>EOS</h2></div> 
+      <h3>{{LastCryptoPrice.eos}}</h3>
+      </mat-grid-tile>
+   </mat-grid-list>
+    </mat-card-content>
+  </mat-card>
+ 
+
+
+</div>

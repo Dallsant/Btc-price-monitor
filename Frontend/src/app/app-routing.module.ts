@@ -11,6 +11,11 @@ const routes: Routes = [
     path: 'bs',
     loadChildren: './modules/bs-price-logging/bs-price-logging.module#BsPriceLoggingModule'
   }
+  ,
+  {
+    path: 'crypto',
+    loadChildren: './modules/crypto-price-logging/crypto-price-logging.module#CryptoPriceLoggingModule'
+  }
 ];
 
 @NgModule({

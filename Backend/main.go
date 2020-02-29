@@ -35,14 +35,17 @@ func main() {
 	// go func() {
 	// 	requestCurrentBtcPrice()
 	// }()
+	// go func() {
+	// 	requestCurrentbsPrice()
+	// }()
 	go func() {
-		requestCurrentbsPrice()
+		requestCurrentCryptoPrices()
 	}()
 	handleRequests()
 }
 
 func InitialMigration() {
-	db.AutoMigrate(&BtcPriceRecord{}, &BsPriceRecord{})
+	db.AutoMigrate(&BtcPriceRecord{}, &BsPriceRecord{}, &CryptoRecord{})
 }
 
 func logger(err string, domain string) {

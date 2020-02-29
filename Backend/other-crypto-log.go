@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"math"
 	"net"
 	"net/http"
 	"time"
@@ -73,6 +74,9 @@ type CryptoRecord struct {
 	Timestamp int64   `json:"timestamp"`
 }
 
+func Round(x, unit float64) float64 {
+	return math.Round(x*unit) / unit
+}
 func requestCurrentCryptoPrices() {
 	for true {
 		t := &http.Transport{
@@ -89,22 +93,36 @@ func requestCurrentCryptoPrices() {
 		defer resp.Body.Close()
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
-			logger(err.Error(), "BS Price Request")
+			logger(err.Error(), "Crypto Price Request")
 		}
 		if resp.StatusCode == 200 {
 			var cryptoPrice CryptoPriceRequest
 			json.Unmarshal(body, &cryptoPrice)
+			btcPrice := cryptoPrice.Rates.Usd.Value
+			unit := float64(10000)
 			db.Create(&CryptoRecord{
-				Eth:       cryptoPrice.Rates.Eth.Value,
-				Ltc:       cryptoPrice.Rates.Ltc.Value,
-				Xrp:       cryptoPrice.Rates.Xrp.Value,
-				Eos:       cryptoPrice.Rates.Eos.Value,
-				Xlm:       cryptoPrice.Rates.Xlm.Value,
-				Bnb:       cryptoPrice.Rates.Bnb.Value,
+				Eth:       Round(btcPrice/cryptoPrice.Rates.Eth.Value, unit),
+				Ltc:       Round(btcPrice/cryptoPrice.Rates.Ltc.Value, unit),
+				Xrp:       Round(btcPrice/cryptoPrice.Rates.Xrp.Value, unit),
+				Eos:       Round(btcPrice/cryptoPrice.Rates.Eos.Value, unit),
+				Xlm:       Round(btcPrice/cryptoPrice.Rates.Xlm.Value, unit),
+				Bnb:       Round(btcPrice/cryptoPrice.Rates.Bnb.Value, unit),
 				Updated:   formatDate(fmt.Sprintf("%s", time.Now())),
 				Timestamp: time.Now().Unix(),
 			})
 		}
 		time.Sleep(43200 * time.Second)
 	}
+}
+
+func getLastCryptoPrice(w http.ResponseWriter, r *http.Request) {
+	var cryptoRecord CryptoRecord
+	db.Order("ID ASC").Find(&cryptoRecord)
+	json.NewEncoder(w).Encode(cryptoRecord)
+}
+
+func getCryptoRecords(w http.ResponseWriter, r *http.Request) {
+	var cryptoRecords []CryptoRecord
+	db.Order("ID ASC").Find(&cryptoRecords)
+	json.NewEncoder(w).Encode(cryptoRecords)
 }
